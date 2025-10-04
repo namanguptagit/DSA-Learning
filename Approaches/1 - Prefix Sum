@@ -1,0 +1,238 @@
+# 📊 Prefix Sum - Complete Guide
+
+## 🎯 Table of Contents
+1. [What is Prefix Sum?](#what-is-prefix-sum)
+2. [Algorithm & Implementation](#algorithm--implementation)
+3. [Step-by-Step Example](#step-by-step-example)
+4. [Range Sum Queries](#range-sum-queries)
+5. [Complete Code Solution](#complete-code-solution)
+6. [Time & Space Complexity](#time--space-complexity)
+7. [Common Pitfalls & Tips](#common-pitfalls--tips)
+8. [Advanced Topics](#advanced-topics)
+9. [Quick Reference](#quick-reference)
+
+---
+
+## 🧠 What is Prefix Sum?
+
+**Prefix Sum** is a technique that precomputes cumulative sums to answer range sum queries in O(1) time.
+
+### 📝 Definition
+A prefix sum array `P` of an array `A` stores, at each position `j`, the sum of all elements from the start up to `j`:
+
+```
+P[j] = A[0] + A[1] + ... + A[j]
+```
+
+### ✨ Key Benefits
+- **O(1)** range sum queries after **O(n)** preprocessing
+- Perfect for problems with many range sum queries
+- Foundation for more advanced techniques
+
+---
+
+## 🔧 Algorithm & Implementation
+
+### 📋 Step-by-Step Algorithm
+1. Create prefix array `P` of length `n`
+2. Set `P[0] = A[0]`
+3. For `j` from 1 to `n-1`: `P[j] = P[j-1] + A[j]`
+
+### 🎯 Core Formula
+```python
+P[j] = P[j-1] + A[j]  # for j > 0
+P[0] = A[0]           # base case
+```
+
+---
+
+## 📚 Step-by-Step Example
+
+### Given Array
+```
+A = [1, 2, 3, 4, 5, 6, 7]
+```
+
+### Building Prefix Array
+```
+P[0] = A[0] = 1
+P[1] = P[0] + A[1] = 1 + 2 = 3
+P[2] = P[1] + A[2] = 3 + 3 = 6
+P[3] = P[2] + A[3] = 6 + 4 = 10
+P[4] = P[3] + A[4] = 10 + 5 = 15
+P[5] = P[4] + A[5] = 15 + 6 = 21
+P[6] = P[5] + A[6] = 21 + 7 = 28
+```
+
+### Final Result
+```
+P = [1, 3, 6, 10, 15, 21, 28]
+```
+
+---
+
+## 🎯 Range Sum Queries
+
+### 📐 Formula
+```
+SUM(i, j) = P[j] - P[i-1]  (if i > 0)
+SUM(0, j) = P[j]           (if i == 0)
+```
+
+### 🔍 Detailed Example: SUM(2, 5)
+**Goal**: Find sum of elements from index 2 to 5: `[3, 4, 5, 6]`
+
+**Step-by-step**:
+1. Look up `P[5] = 21` (sum of `A[0..5]`)
+2. Look up `P[1] = 3` (sum of `A[0..1]`)
+3. Subtract: `21 - 3 = 18` → sum of `A[2..5]`
+
+### 📊 More Examples
+| Query | Formula | Calculation | Result | Elements |
+|-------|---------|-------------|---------|----------|
+| SUM(0,3) | P[3] | 10 | 10 | [1,2,3,4] |
+| SUM(1,4) | P[4] - P[0] | 15 - 1 | 14 | [2,3,4,5] |
+| SUM(6,6) | P[6] - P[5] | 28 - 21 | 7 | [7] |
+
+---
+
+## 💻 Complete Code Solution
+
+```python
+def build_prefix_sum(arr):
+    """
+    Build prefix sum array from given array
+    Time: O(n), Space: O(n)
+    """
+    n = len(arr)
+    if n == 0:
+        return []
+    
+    prefix = [0] * n
+    prefix[0] = arr[0]
+    
+    for i in range(1, n):
+        prefix[i] = prefix[i-1] + arr[i]
+    
+    return prefix
+
+def range_sum(prefix, left, right):
+    """
+    Get sum of elements from index left to right (inclusive)
+    Time: O(1)
+    """
+    if left == 0:
+        return prefix[right]
+    return prefix[right] - prefix[left - 1]
+
+# Example usage
+if __name__ == "__main__":
+    # Test array
+    A = [1, 2, 3, 4, 5, 6, 7]
+    
+    # Build prefix sum
+    prefix = build_prefix_sum(A)
+    print(f"Original array: {A}")
+    print(f"Prefix array:   {prefix}")
+    
+    # Test queries
+    print(f"\nRange sum queries:")
+    print(f"SUM(0, 3) = {range_sum(prefix, 0, 3)}")  # 10
+    print(f"SUM(1, 4) = {range_sum(prefix, 1, 4)}")  # 14
+    print(f"SUM(2, 5) = {range_sum(prefix, 2, 5)}")  # 18
+    print(f"SUM(6, 6) = {range_sum(prefix, 6, 6)}")  # 7
+```
+
+---
+
+## ⏱️ Time & Space Complexity
+
+| Operation | Time Complexity | Space Complexity |
+|-----------|----------------|------------------|
+| Build Prefix Array | O(n) | O(n) |
+| Range Sum Query | O(1) | O(1) |
+| Total for m queries | O(n + m) | O(n) |
+
+### 🚀 When to Use
+- ✅ Many range sum queries on static array
+- ✅ 2D prefix sums for matrix problems
+- ✅ Subarray problems
+- ❌ Frequent array updates (use Fenwick Tree instead)
+
+---
+
+## ⚠️ Common Pitfalls & Tips
+
+### 🚨 Common Mistakes
+1. **Indexing**: Be consistent with 0-based indexing
+2. **Empty Arrays**: Handle `n == 0` explicitly
+3. **Invalid Ranges**: Check if `i > j` (return 0 or error)
+4. **Integer Overflow**: Watch for large sums in languages without big integers
+
+### 💡 Pro Tips
+- Always validate input ranges before querying
+- Consider using 1-based indexing if it simplifies your logic
+- For frequently updated arrays, use Fenwick Tree or Segment Tree
+
+---
+
+## 🚀 Advanced Topics
+
+### 🌳 Fenwick Tree (Binary Indexed Tree)
+When you need both **range queries** and **point updates**:
+
+```python
+# Use Fenwick Tree for:
+# - Query: O(log n)
+# - Update: O(log n)
+```
+
+**When to use**:
+- Frequent updates + queries
+- Need both point updates and range sums
+
+### 🔄 Range Updates with Difference Array
+For adding value `v` to range `[l, r]` multiple times:
+
+```python
+# Maintain difference array D:
+D[l] += v
+D[r+1] -= v
+
+# After all operations, prefix-sum D to get final array
+```
+
+---
+
+## 📋 Quick Reference
+
+### 🎯 Core Formulas
+```
+Build:     P[j] = P[j-1] + A[j]
+Query:     SUM(i,j) = P[j] - P[i-1]  (if i > 0)
+           SUM(0,j) = P[j]           (if i == 0)
+```
+
+### 📊 Complexity Summary
+```
+Build: O(n) time, O(n) space
+Query: O(1) time
+```
+
+### 🎯 Use Cases
+- Static array with many range sum queries
+- Subarray problems
+- 2D matrix problems
+- Foundation for advanced data structures
+
+---
+
+## 🎉 Practice Problems
+1. **Subarray Sum Equals K** - Find subarrays with given sum
+2. **Range Sum Query** - LeetCode classic
+3. **Maximum Subarray** - Kadane's algorithm variant
+4. **2D Range Sum** - Matrix prefix sums
+
+---
+
+*Happy Coding! 🚀*
