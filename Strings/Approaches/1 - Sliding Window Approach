@@ -1,0 +1,181 @@
+# 🧠 Sliding Window Approach in Strings (Python 3)
+
+## 📖 Overview
+
+The **Sliding Window** technique is a powerful algorithmic pattern used to efficiently solve problems involving substrings or subarrays. Instead of repeatedly scanning parts of a string from scratch, we maintain a window (a range of indices) that slides through the string — updating information as we move — saving time and computation.
+
+---
+
+## 💡 What Is a Window?
+
+Think of a window as a portion of the string that we're currently analyzing.
+
+**Example:** In `"abcdef"`, a window of size 3 moves like this:
+
+```
+"abc" → "bcd" → "cde" → "def"
+```
+
+Each step, the window moves one position forward (we drop the leftmost character and include the next one).
+
+---
+
+## 🔄 Why Use It?
+
+| **Without Sliding Window** | **With Sliding Window** |
+|----------------------------|-------------------------|
+| Check all substrings repeatedly | Reuse work from previous window |
+| **Time Complexity:** O(n²) or worse | **Time Complexity:** O(n) |
+| Inefficient computation | Optimal performance |
+
+---
+
+## ⚙️ Types of Sliding Windows
+
+### 1️⃣ **Fixed-Size Window**
+- **Description:** The window size is constant (e.g., 3 characters at a time)
+- **Use when:** Finding maximum, minimum, or some property among all substrings of length k
+
+### 2️⃣ **Variable-Size Window**
+- **Description:** The window expands or contracts depending on conditions (e.g., unique characters, at most k distinct chars)
+- **Use when:** Finding the longest or shortest substring satisfying a property
+
+---
+
+## 🧩 Examples
+
+### **Example 1: Fixed-Size Window**
+
+**Problem:** Find the substring of size k that has all unique characters.
+
+```python
+def longest_unique_substring_k(s, k):
+    window_start = 0
+    char_count = {}
+    max_substring = ""
+
+    for window_end in range(len(s)):
+        right_char = s[window_end]
+        char_count[right_char] = char_count.get(right_char, 0) + 1
+
+        # Shrink the window if it's too large
+        if window_end - window_start + 1 > k:
+            left_char = s[window_start]
+            char_count[left_char] -= 1
+            if char_count[left_char] == 0:
+                del char_count[left_char]
+            window_start += 1
+
+        # Check if window has all unique characters
+        if window_end - window_start + 1 == k and len(char_count) == k:
+            max_substring = s[window_start:window_end + 1]
+
+    return max_substring
+
+# Test
+print(longest_unique_substring_k("abcabcbb", 3))
+# Output: "abc"
+```
+
+**🧠 Explanation:**
+- We move a window of size k across the string
+- For each new character, add it to the dictionary
+- If the window exceeds size k, remove the leftmost character
+- Check if all characters are unique
+
+### **Example 2: Variable-Size Window**
+
+**Problem:** Find the length of the longest substring without repeating characters.
+
+```python
+def length_of_longest_substring(s):
+    left = 0
+    char_set = set()
+    max_len = 0
+
+    for right in range(len(s)):
+        while s[right] in char_set:
+            # Remove leftmost character until duplicate is gone
+            char_set.remove(s[left])
+            left += 1
+
+        char_set.add(s[right])
+        max_len = max(max_len, right - left + 1)
+
+    return max_len
+
+# Test
+print(length_of_longest_substring("abcabcbb"))
+# Output: 3 ("abc")
+```
+
+**🧠 Explanation:**
+- `right` expands the window by adding new characters
+- If a duplicate appears, shrink the window by moving `left`
+- Keep track of the maximum window size seen so far
+
+### **Example 3: List All Substrings of Length k Without Duplicates**
+
+```python
+def substrings_no_repeat(s, k):
+    left = 0
+    seen = set()
+    result = []
+
+    for right in range(len(s)):
+        while s[right] in seen:
+            seen.remove(s[left])
+            left += 1
+
+        seen.add(s[right])
+
+        # If window reaches size k
+        if right - left + 1 == k:
+            result.append(s[left:right + 1])
+            # Move window forward
+            seen.remove(s[left])
+            left += 1
+
+    return result
+
+# Test
+print(substrings_no_repeat("abac", 2))
+# Output: ['ab', 'ba', 'ac']
+```
+
+**🧠 Explanation:**
+- As we slide, we ensure all characters in the window are unique
+- Once the window reaches size k, record the substring and slide forward
+
+---
+
+## 🧮 Complexity Analysis
+
+| **Type** | **Time** | **Space** | **Notes** |
+|----------|----------|-----------|-----------|
+| **Fixed-Size** | O(n) | O(k) | Each char added/removed once |
+| **Variable-Size** | O(n) | O(n) | Expands & shrinks dynamically |
+
+---
+
+## 🧭 When to Use Sliding Window
+
+You can use the sliding window technique for problems like:
+
+- ✅ **Longest/shortest substring** with certain conditions
+- ✅ **Counting substrings** with limited unique characters  
+- ✅ **Finding patterns** of size k
+- ✅ **Continuous substring analysis** (e.g., anagrams, distinct chars)
+
+---
+
+## 🏁 Key Takeaways
+
+- ✅ **Avoid recomputation** — reuse info from previous window
+- ✅ **Move window with two pointers** (left, right)
+- ✅ **Adjust window dynamically** based on problem conditions
+- ✅ **Typical pattern** for O(n) substring problems
+
+---
+
+*Happy coding! 🚀*
