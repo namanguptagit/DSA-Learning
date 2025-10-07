@@ -1,3 +1,5 @@
+from typing import List
+
 # Trying Brute Force Approach first
 class Solution:
     def threeSum(self, nums: List[int]) -> List[List[int]]:
@@ -54,4 +56,42 @@ class Solution:
                         j+=1
                     while j<k and nums[k] == nums[k+1]:
                         k-=1
-        return ans        
+        return ans
+
+# Add code below this line to test your solution
+if __name__ == "__main__":
+    # Example 1
+    nums1 = [-1, 0, 1, 2, -1, -4]
+    solution = Solution()
+    result1 = solution.threeSum(nums1)
+    print(f"Example 1: nums = {nums1}")
+    print(f"Output: {result1}")
+    print("-" * 20)
+
+    # Example 2
+    nums2 = [0, 1, 1]
+    result2 = solution.threeSum(nums2)
+    print(f"Example 2: nums = {nums2}")
+    print(f"Output: {result2}")
+    print("-" * 20)
+
+    # Example 3
+    nums3 = [0, 0, 0]
+    result3 = solution.threeSum(nums3)
+    print(f"Example 3: nums = {nums3}")
+    print(f"Output: {result3}")
+    print("-" * 20)
+
+    # Example 4 (user input)
+    print("Testing with user input...")
+    try:
+        # Take list input
+        user_nums_str = input("Enter a list of numbers separated by spaces (e.g., -1 0 1 2 -1 -4): ")
+        user_nums = list(map(int, user_nums_str.split()))
+
+        user_result = solution.threeSum(user_nums)
+        print(f"User Input: nums = {user_nums}")
+        print(f"Output: {user_result}")
+
+    except ValueError:
+        print("Invalid input. Please enter valid numbers.")        
