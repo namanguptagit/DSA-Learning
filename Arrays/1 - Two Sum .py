@@ -1,6 +1,5 @@
 from typing import List
 
-# Copy and paste your Solution class here
 class Solution:
     def twoSum(self, nums: List[int], target: int) -> List[int]:
         n = len(nums)
@@ -10,8 +9,21 @@ class Solution:
             if remaining in hash_map:
                 return [hash_map[remaining], i]
             hash_map[nums[i]] = i
-
-# Add code below this line to test your solution
+class Solution:
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        n = len(nums)
+        nums.sort()
+        left = 0
+        right = n - 1
+        while left < right:
+            if nums[left] + nums[right] == target:
+                return [left, right]
+            elif nums[left] + nums[right] < target:
+                left += 1
+            else:
+                right -= 1
+        return -1
+# Add code below this line to test your solution    
 if __name__ == "__main__":
     # Example 1
     nums1 = [2, 7, 11, 15]
