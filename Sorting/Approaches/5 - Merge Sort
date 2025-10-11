@@ -1,0 +1,92 @@
+Merge Sort (with separate merge() function)
+
+Merge Sort is a Divide-and-Conquer sorting algorithm. It repeatedly divides
+the array into halves, sorts them recursively, and merges the sorted halves
+using a separate merge() function.
+
+------------------------------------
+Working Steps:
+------------------------------------
+1. Divide the array into two halves recursively.
+2. Sort both halves individually.
+3. Merge the two sorted halves using the merge() function.
+4. Continue until the entire array is sorted.
+
+------------------------------------
+Python Code:
+------------------------------------
+
+def merge(arr, left, mid, right):
+    # Create temporary arrays for left and right subarrays
+    L = arr[left:mid + 1]
+    R = arr[mid + 1:right + 1]
+
+    i = j = 0
+    k = left
+
+    # Merge the two subarrays into the main array
+    while i < len(L) and j < len(R):
+        if L[i] <= R[j]:
+            arr[k] = L[i]
+            i += 1
+        else:
+            arr[k] = R[j]
+            j += 1
+        k += 1
+
+    # Copy remaining elements of L[]
+    while i < len(L):
+        arr[k] = L[i]
+        i += 1
+        k += 1
+
+    # Copy remaining elements of R[]
+    while j < len(R):
+        arr[k] = R[j]
+        j += 1
+        k += 1
+
+
+def merge_sort(arr, left, right):
+    if left < right:
+        mid = (left + right) // 2
+
+        # Recursively sort both halves
+        merge_sort(arr, left, mid)
+        merge_sort(arr, mid + 1, right)
+
+        # Merge the sorted halves
+        merge(arr, left, mid, right)
+
+
+# Example usage
+arr = [38, 27, 43, 3, 9, 82, 10]
+print("Original array:", arr)
+merge_sort(arr, 0, len(arr) - 1)
+print("Sorted array:", arr)
+
+------------------------------------
+Output:
+Original array: [38, 27, 43, 3, 9, 82, 10]
+Sorted array:   [3, 9, 10, 27, 38, 43, 82]
+
+------------------------------------
+Time Complexity:
+- Best Case:    O(n log n)
+- Average Case: O(n log n)
+- Worst Case:   O(n log n)
+
+Space Complexity:
+- O(n) (for temporary subarrays)
+
+Advantages:
+- Stable sorting algorithm (maintains order of equal elements)
+- Predictable O(n log n) performance
+
+Disadvantages:
+- Uses extra memory space
+- Slightly slower for small datasets compared to in-place sorts like Quick Sort
+
+Applications:
+- Ideal for sorting linked lists
+- Used for external sorting (large files on disk)
