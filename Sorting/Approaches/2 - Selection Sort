@@ -1,0 +1,48 @@
+Selection Sort
+
+Selection Sort is a simple and intuitive sorting algorithm. 
+It divides the list into two parts: a sorted portion (at the front) 
+and an unsorted portion (the rest of the list). The algorithm 
+repeatedly selects the smallest element from the unsorted part 
+and swaps it with the first unsorted element.
+
+Working Principle:
+- Find the minimum element in the unsorted portion.
+- Swap it with the element at the beginning of the unsorted section.
+- Move the boundary between the sorted and unsorted parts forward by one.
+- Repeat until the list is fully sorted.
+
+Example:
+Input: [64, 25, 12, 22, 11]
+After sorting: [11, 12, 22, 25, 64]
+
+Python Code:
+--------------------
+def selection_sort(arr):
+    n = len(arr)
+    for i in range(n):
+        # Assume the minimum is the first element
+        min_index = i
+        # Find the smallest element in the remaining array
+        for j in range(i + 1, n):
+            if arr[j] < arr[min_index]:
+                min_index = j
+        # Swap the found minimum element with the first element
+        arr[i], arr[min_index] = arr[min_index], arr[i]
+
+# Example usage
+data = [64, 25, 12, 22, 11]
+selection_sort(data)
+print("Sorted array:", data)
+
+Time Complexity:
+- Best Case: O(n²)
+- Average Case: O(n²)
+- Worst Case: O(n²)
+
+Space Complexity:
+- O(1), as it sorts the list in place.
+
+Selection Sort performs fewer swaps than Bubble Sort, 
+but both are inefficient for large datasets. It is mainly 
+used for small lists or when swap cost is high.
