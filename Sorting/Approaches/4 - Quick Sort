@@ -1,0 +1,64 @@
+Quick Sort using Partition Function
+
+Quick Sort works on the divide-and-conquer principle.  
+It selects a pivot element and partitions the array so that:
+- All elements smaller than the pivot are on its left.
+- All elements greater than the pivot are on its right.
+
+Then, it recursively sorts the left and right parts.
+
+------------------------------------
+Python Code:
+------------------------------------
+
+def partition(arr, low, high):
+    # Choose the last element as the pivot
+    pivot = arr[high]
+    i = low - 1  # index of smaller element
+
+    for j in range(low, high):
+        # If current element is smaller than or equal to pivot
+        if arr[j] <= pivot:
+            i += 1
+            arr[i], arr[j] = arr[j], arr[i]  # swap
+
+    # Place pivot in correct position
+    arr[i + 1], arr[high] = arr[high], arr[i + 1]
+    return i + 1  # return the partition index
+
+
+def quick_sort(arr, low, high):
+    if low < high:
+        # pi is partitioning index
+        pi = partition(arr, low, high)
+
+        # Recursively sort elements before and after partition
+        quick_sort(arr, low, pi - 1)
+        quick_sort(arr, pi + 1, high)
+
+
+# Example usage
+arr = [10, 7, 8, 9, 1, 5]
+print("Original array:", arr)
+quick_sort(arr, 0, len(arr) - 1)
+print("Sorted array:", arr)
+
+------------------------------------
+Output:
+Original array: [10, 7, 8, 9, 1, 5]
+Sorted array: [1, 5, 7, 8, 9, 10]
+
+------------------------------------
+Time Complexity:
+- Best / Average: O(n log n)
+- Worst: O(n²) (if the pivot is always the smallest or largest element)
+
+Space Complexity:
+- O(log n) due to recursion stack
+
+Advantages:
+- Works in place (no extra space for lists)
+- Efficient for large datasets
+
+Disadvantages:
+- Performance degrades when pivot selection is poor
