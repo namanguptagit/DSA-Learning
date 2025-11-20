@@ -16,6 +16,8 @@ class Solution:
                 if self.is_vowel(s[left]):
                     vowel -= 1
                 left += 1
+
+        return max_vowel
         # INSERT_YOUR_CODE
 def test_maxVowels():
     solver = Solution()
@@ -73,5 +75,3 @@ def test_maxVowels():
 
 if __name__ == "__main__":
     test_maxVowels()
-
-        return max_vowel
