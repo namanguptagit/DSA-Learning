@@ -1,66 +1,37 @@
 class Solution:
-    def minimumOperations(self, nums: List[int]) -> int:
-        n = len(nums)
-        count = 0
-        for i in range(n):
-            if nums[i] % 3 != 0:
-                count += 1
-        return count
+    def maxSumDivThree(self, nums: List[int]) -> int:
+        sum_ = 0
 
-# Simple tests consistent with repository style (print + assert)
-def test_minimumOperations():
-    solver = Solution()
+        min1 = min2 = float('inf')
+        min11 = min22 = float('inf')
 
-    # Test 1: Typical input with various mods
-    nums1 = [3, 6, 7, 4, 5]
-    expected1 = 3  # 7, 4, 5 are not divisible by 3
-    out1 = solver.minimumOperations(nums1)
-    print("Test 1:", out1)
-    assert out1 == expected1
+        for x in nums:
+            sum_ += x
+            r = x % 3
 
-    # Test 2: All divisible by 3
-    nums2 = [3, 6, 9, 12]
-    expected2 = 0
-    out2 = solver.minimumOperations(nums2)
-    print("Test 2:", out2)
-    assert out2 == expected2
+            if r == 1:
+                if x < min1:
+                    min11, min1 = min1, x
+                elif x < min11:
+                    min11 = x
+            elif r == 2:
+                if x < min2:
+                    min22, min2 = min2, x
+                elif x < min22:
+                    min22 = x
 
-    # Test 3: None divisible by 3
-    nums3 = [1, 2, 4, 5, 7, 8]
-    expected3 = 6
-    out3 = solver.minimumOperations(nums3)
-    print("Test 3:", out3)
-    assert out3 == expected3
+        rem = sum_ % 3
 
-    # Test 4: Empty list
-    nums4 = []
-    expected4 = 0
-    out4 = solver.minimumOperations(nums4)
-    print("Test 4:", out4)
-    assert out4 == expected4
+        if rem == 0:
+            return sum_
 
-    # Test 5: Single element divisible by 3
-    nums5 = [9]
-    expected5 = 0
-    out5 = solver.minimumOperations(nums5)
-    print("Test 5:", out5)
-    assert out5 == expected5
-
-    # Test 6: Single element not divisible by 3
-    nums6 = [10]
-    expected6 = 1
-    out6 = solver.minimumOperations(nums6)
-    print("Test 6:", out6)
-    assert out6 == expected6
-
-    # Test 7: Negative numbers
-    nums7 = [-3, -6, -8, -2]
-    expected7 = 2  # -8, -2 are not divisible by 3
-    out7 = solver.minimumOperations(nums7)
-    print("Test 7:", out7)
-    assert out7 == expected7
-
-    print("All tests passed for minimumOperations.")
-
-if __name__ == "__main__":
-    test_minimumOperations()
+        if rem == 1:
+            r1 = min1
+            r2 = min2 + min22 if min2 < float('inf') and min22 < float('inf') else float('inf')
+            remove = min(r1, r2)
+            return 0 if remove == float('inf') else sum_ - remove
+        else:
+            r1 = min2
+            r2 = min1 + min11 if min1 < float('inf') and min11 < float('inf') else float('inf')
+            remove = min(r1, r2)
+            return 0 if remove == float('inf') else sum_ - remove
